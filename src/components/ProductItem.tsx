@@ -12,7 +12,7 @@ interface ItemProps {
   totalr: { current: number };
 }
 
-const Item: React.FC<ItemProps> = ({ item, setTotal, total, totalr }) => {
+const ProductItem: React.FC<ItemProps> = ({ item, setTotal, total, totalr }) => {
   const specilPriceCounter = useRef(0);
 
   const addItem = (price: number) => {
@@ -45,4 +45,4 @@ const Item: React.FC<ItemProps> = ({ item, setTotal, total, totalr }) => {
   );
 };
 
-export default Item;
+export default ProductItem;

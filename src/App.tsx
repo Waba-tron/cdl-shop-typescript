@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./App.css";
-import Item from "./components/Item";
+import ProductItem from "./components/ProductItem";
 
 interface Item {
   id: number;
@@ -21,18 +21,22 @@ function App() {
   const [total, setTotal] = useState<number>(0);
   const totalr = useRef<number>(0);
 
+  function divideToTwoDecimalPlaces(number: number) {
+    return Math.round((number + Number.EPSILON) * 100) / 100;
+  }
+
   return (
     <div className="App">
       <h1>CDL Shop</h1>
       {items.map((item) => (
-        <Item
+        <ProductItem
           key={item.id}
           item={item}
           setTotal={setTotal}
           total={total}
           totalr={totalr}     />
       ))}
-      £ {totalr.current}
+      £ {divideToTwoDecimalPlaces(totalr.current)}
     </div>
   );
 }
