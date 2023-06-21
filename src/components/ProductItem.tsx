@@ -5,7 +5,7 @@ interface ItemProps {
     name: string;
     price: number;
     condition: number;
-    specilPrice: number;
+    specialPrice: number;
   };
   setTotal: (total: number) => void;
   total: number;
@@ -13,20 +13,49 @@ interface ItemProps {
 }
 
 const ProductItem: React.FC<ItemProps> = ({ item, setTotal, total, totalr }) => {
-  const specilPriceCounter = useRef(0);
+  const specialPriceCounter =  useRef<number>(0);
 
+  const { condition, specialPrice } = item;
   const addItem = (price: number) => {
-    specilPriceCounter.current++;
-    console.log(specilPriceCounter.current);
 
-    if (specilPriceCounter.current >= item.condition) {
-      let finalTotal = total - item.condition * price;
-      setTotal(finalTotal + item.specilPrice);
+        /*
 
-      let finalTotal2 = totalr.current - item.condition * price;
-      totalr.current = finalTotal2 + item.specilPrice + item.price;
+    But the concept is...
 
-      specilPriceCounter.current = 0;
+    We have a counter 
+
+    Example: 1
+
+    Once counter reaches condition of special price,
+    take away the prices of items * condition (Use item A for example)
+
+    counter = 3 
+
+    total = 150 (for 3 units of item A)
+
+    finalTotal = 150 (current total) - 150 ie (50 * 3)
+
+    Add the special price to the total
+
+    total = 0 + 130
+
+    reset the counter
+
+    counter = 0
+
+    */
+
+    specialPriceCounter.current++;
+    console.log(specialPriceCounter.current);
+
+    if (specialPriceCounter.current >= condition) {
+      const finalTotal = total - condition * price;
+      setTotal(finalTotal + specialPrice);
+
+      const finalTotal2 = totalr.current - condition * price;
+      totalr.current = finalTotal2 + specialPrice + item.price;
+
+      specialPriceCounter.current = 0;
     } else {
       setTotal(total + price);
       totalr.current = totalr.current + price;

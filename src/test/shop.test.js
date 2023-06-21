@@ -9,7 +9,7 @@ describe("Item component", () => {
 
     const itemA = render(
       <ProductItem
-        item={{ id: 0, name: "Item A", price: 0.5, specilPrice: 1.3, condition: 3 }}
+        item={{ id: 0, name: "Item A", price: 0.5, specialPrice: 1.3, condition: 3 }}
         onClick={jest.fn()}
         setTotal={setTotalMock}
         total={0}
@@ -29,7 +29,7 @@ describe("Item component", () => {
 
     const itemA = render(
       <ProductItem
-        item={{ id: 0, name: "Item A", price: 0.5, specilPrice: 1.3, condition: 3 }}
+        item={{ id: 0, name: "Item A", price: 0.5, specialPrice: 1.3, condition: 3 }}
         onClick={jest.fn()}
         setTotal={setTotalMock}
         total={0}
@@ -51,7 +51,7 @@ describe("Item component", () => {
 
     const itemA = render(
       <ProductItem
-        item={{ id: 0, name: "Item A", price: 0.5, specilPrice: 1.3, condition: 3 }}
+        item={{ id: 0, name: "Item A", price: 0.5, specialPrice: 1.3, condition: 3 }}
         onClick={jest.fn()}
         setTotal={setTotalMock}
         total={0}
@@ -61,7 +61,7 @@ describe("Item component", () => {
 
     const itemB= render(
       <ProductItem
-        item={{ id: 1, name: "Item B", price: 0.3, specilPrice: 0.45, condition: 2 }}
+        item={{ id: 1, name: "Item B", price: 0.3, specialPrice: 0.45, condition: 2 }}
         onClick={jest.fn()}
         setTotal={setTotalMock}
         total={0}

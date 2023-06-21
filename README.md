@@ -1,10 +1,36 @@
-# Getting Started with Create React App
+# cdl-shop-typescript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
 
-## Available Scripts
+- [Project Overview](#project-overview)
+- [Technology Used](#technology-used) 
+- [Installation](#installation)
+- [Usage](#usage)
+- [Calculation](#calculation)
+- [Features](#features)
+- [Limitations](#limitations)
+- [Deployment](#limitations)
+
+## Project Overview
+
+CDL submission for web engineer role. This is a UI is a cart system
+
+## Technology Used
+
+- React
+- TypeScript
+- Jest
+- Github Action
+
+## Installation
 
 In the project directory, you can run:
+
+### `npm install`
+
+install node package in route directory
+
+## Usage
 
 ### `npm start`
 
@@ -17,31 +43,119 @@ You will also see any lint errors in the console.
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Calculation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   This is the algorithm/calculation i went for. The basic concept is the following. Notice i was using the The useRef Hook. This allowed me to persist values between renders. The reason I used this hook is because I was having issues where the total pricing of my items, would always be a state behind. Use ref is great because it allowed me to fix this problem as it directly accesses the DOM directly
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    So the way the calculation works is we have a counter 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```javascript
+const specialPriceCounter =  useRef<number>(0);
+```
+    Example: 1
 
-### `npm run eject`
+    Once counter reaches condition of special price,
+    take away the prices of items * condition 
+    
+  (Use item A for example)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    total - (price * condition)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    counter = 3 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    total = 1.5 (for 3 units of item A)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    finalTotal = 1.5 (current total) - 1.5 ie (50 * 3)
 
-## Learn More
+    Add the special price to the total
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    total = 0 + 130
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-# cdl-shop-typescript
+    reset the counter
+
+    counter = 0
+
+
+```javascript
+
+const items: Item[] = [
+  { id: 0, name: "Item A", price: 0.5, specialPrice: 1.3, condition: 3 },
+  { id: 1, name: "Item B", price: 0.3, specialPrice: 0.45, condition: 2 },
+  { id: 2, name: "Item C", price: 0.2, specialPrice: 0.3, condition: 2 },
+  { id: 3, name: "Item D", price: 0.15, specialPrice: 0.2, condition: 2 },
+];
+
+  const addItem = (price: number) => {
+
+    specialPriceCounter.current++;
+    console.log(specialPriceCounter.current);
+
+    if (specialPriceCounter.current >= condition) {
+      const finalTotal = total - condition * price;
+      setTotal(finalTotal + specialPrice);
+
+      const finalTotal2 = totalr.current - condition * price;
+      totalr.current = finalTotal2 + specialPrice + item.price;
+
+      specialPriceCounter.current = 0;
+    } else {
+      setTotal(total + price);
+      totalr.current = totalr.current + price;
+    }
+
+  };
+```
+
+## Features
+
+- The UI Caluclate total price of a number of items
+- Checkouts items in any order
+
+## Limitations
+
+- If given more time the first thing I would start implementing is improving the calculation algorithm. I think it can difficult to read understand so that would be my first improvement
+- Another limitation is it is quite limited as an application so adding new exciting features is a must. Currently the app only lets you calculate the items price in the application and thats that. But maybe having a checkout feature to allow the user to checkout a list of items and making further checkouts along the way
+
+## Deployment
+The following yaml file is used for the automated deployment using github actions, simply making changes to the code and pushing those changing will trigger a github actions pipeline to automate the build, test and deployment phases of the app
+
+### `git push`
+
+```yaml
+name: deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+    - name: Deploy with gh-pages
+      run: |
+        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+
